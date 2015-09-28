@@ -1,0 +1,111 @@
+/initialize Ball class
+//initialize Board class
+Ball[] ball = new Ball[1]; //The number of balls is now dynamic  
+Board board;
+
+
+//DECLARE
+
+void setup() {
+  size(500, 500);
+  background (0);
+  smooth();
+  board = new Board (20, mouseY, 10, 45);
+  for (int i = 0; i < ball.length; i++)
+  {
+    float x = random(width);
+    float y = random(height);
+    int d = 15;
+    ball[i] = new Ball(x, y, d);
+  }
+}
+
+void draw() {
+  background (0);
+  fill (255);
+  board.display();
+  for (int i = 0; i < ball.length; i++)
+  {
+    ball[i].move();
+    ball[i].display();
+  }
+}
+
+class Ball {
+  float diameter;
+  float x;
+  float y;
+  float speedX;
+  float speedY;
+
+  Ball(float newX, float newY, float newD) {
+    x = newX;
+    y = newY;
+    diameter = newD;
+    speedX = 5;
+    speedY = 5;
+  }
+
+  void display () {
+    stroke(0);
+    ellipse (x, y, diameter, diameter);
+    fill (255);
+  }
+
+  void move() {
+    x += speedX;
+    y += speedY;
+    
+    
+    //If ball hits wall, reverse it's path
+    if (x > width) {
+      speedX *= -1;
+      speedY *= -1;
+    }
+    
+    //If ball hits board, reverse it's path
+    if (x < board.x && x + diameter > board.x && y + diameter > mouseY && y - diameter < board.boardheight)
+    {
+      speedX *= -1;
+      speedY *= -1;
+    }
+    
+    if (x > board.x && (x - diameter) < (board.x + board.boardwidth) && y + diameter > mouseY && y - diameter < mouseY + board.boardheight)
+    {
+      speedX *= -1;
+    }
+    
+    //If ball hits top or bottom, reverse it's path
+    if (y > height || y < 0) {
+      speedY = speedY*=-1;
+      y = y + speedY;
+    }
+    
+    //If ball misses board, restart ball in new location
+    if (x < 0) {
+      x = 250;
+      y = 250;
+      speedX = speedX;
+      speedY = speedY;
+    }
+  }
+}
+
+//
+class Board {
+  float boardheight;
+  float boardwidth;
+  float x;
+  float y;
+  Board (float boardX, float boardY, float boardW, float boardH) {
+    x = boardX;
+    y = boardY; 
+    boardwidth = boardW;
+    boardheight = boardH;
+  }
+  void display() {
+    stroke(0);
+    rect( x, mouseY, boardwidth, boardheight);
+    fill(255);
+  }
+}
