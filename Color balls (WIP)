@@ -3,18 +3,19 @@ class Ball {
   float vx, vy;
   float size = 10;
   color c;
-  float hue;
+  float hue = 0;
 
   Ball(float x, float y, color c) {
     this.x = x;
     this.y = y;
     this.c = c;
-    c = color(y, 480, 480);
     vx = random(1);
     vy = random(1);
   }
 
   void draw() {
+    hue = (hue + 1) % 255;
+    color c = color(hue, 255, 255);
     noStroke();
     fill(c);
     ellipse(x, y, size*2, size*2);
@@ -36,25 +37,25 @@ ArrayList<Ball> list;
 
 void setup() {
   size(500, 500);
-  colorMode(HSB, 480);
-
+  colorMode(HSB, 255);
+  int hue = 0;
+  
 
   list = new ArrayList<Ball>();
 
   for (int x = 20; x < width-20; x += 20) {      
     for (int y = 20; y < height-20; y += 20) {
+      color c = color(hue, 255, 255);
       list.add(new Ball(x, y, c));
-      fill(y, 480, 480);
-    }
+    }    
   }
 }
 
 void draw() {
-  colorMode(RGB, 100);
-  background(100);
+  background(255);
 
   for (int i = 0; i < list.size(); i += 1) {
     list.get(i).draw();
-    list.get(i).move();
+    list.get(i).move();    
   }
 }
